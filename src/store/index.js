@@ -25,6 +25,18 @@ export const store = createStore(
                         owner: action.ownerID,
                         isComplete: false
                     }]
+                case mutation.SET_TASK_COMPLETE:
+                    return tasks.map(task => {
+                        return (task.id === action.taskID) ? { ...task, isComplete: action.isComplete } : task
+                    })
+                case mutation.SET_TASK_NAME:
+                    return tasks.map(task => {
+                        return (task.id === action.taskID) ? { ...task, name: action.name } : task
+                    })
+                case mutation.SET_TASK_GROUP:
+                    return tasks.map(task => {
+                        return (task.id === action.taskID) ? { ...task, group: action.groupID } : task
+                    })
             }
             return tasks;
         },
