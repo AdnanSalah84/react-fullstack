@@ -14,8 +14,16 @@ export const store = createStore(
     //     return state;
     // },
     combineReducers({
-        session(session = defaultState.session || {}) {
-            return session;
+        session(userSession = defaultState.session || {}, action) {
+            let { type, authenticated, session } = action;
+            switch (type) {
+                case mutation.REQUEST_AUTHENTICATE_USER:
+                    return { ...userSession, authenticated: mutation.AUTHENTICATING };
+                case mutation.PROCESSING_AUTHENTICATE_USER:
+                    return { ...userSession, authenticated };
+                default:
+                    return userSession;
+            }
         },
         tasks(tasks = defaultState.tasks, action) {
             // eslint-disable-next-line default-case
