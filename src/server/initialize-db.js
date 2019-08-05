@@ -9,5 +9,4 @@ async function initializeDB() {
         await collection.insertMany(defaultState[collectionName]);
     }
 }
-
 initializeDB();
