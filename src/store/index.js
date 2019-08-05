@@ -14,6 +14,9 @@ export const store = createStore(
     //     return state;
     // },
     combineReducers({
+        session(session = defaultState.session || {}) {
+            return session;
+        },
         tasks(tasks = defaultState.tasks, action) {
             // eslint-disable-next-line default-case
             switch (action.type) {
