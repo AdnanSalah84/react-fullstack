@@ -66,7 +66,7 @@ export const store = createStore(
             }
             return groups;
         },
-        users(users = []) {
+        users(users = defaultState.users) {
             return users;
         },
     }),

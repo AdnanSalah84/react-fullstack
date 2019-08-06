@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { ConnectedUsernameDisplay } from './UsernameDisplay'
 import * as mutations from '../store/mutations';
 
 const TaskDetail = ({id, comments, task, isComplete, groups, setTaskCompletetion,setTaskGroup, setTaskName })=>(
