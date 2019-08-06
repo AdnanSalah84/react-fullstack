@@ -6,7 +6,7 @@ import axios from 'axios';
 import * as mutations from './mutations';
 
 
-const url = 'http://localhost:8888';
+const url = process.env.NODE_ENV == 'production' ? '' : 'http://localhost:8888';
 
 export function* taskCreateSaga() {
     while (true) {

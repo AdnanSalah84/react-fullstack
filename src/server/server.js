@@ -3,10 +3,11 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { connectDB } from './connect-db';
 import { authenticationRoute } from './authenticate';
+import path from 'path';
 import './initialize-db';
 
 
-let port = 8888;
+let port = process.env.port || 8888;
 let app = express();
 
 app.listen(port, console.log('Server listening on port', port));
@@ -22,12 +23,18 @@ app.use(
 
 authenticationRoute(app);
 
+if (process.env.NODE_ENV == 'production') {
+    app.use(express.static(path.resolve(__dirname, '../../build')));
+    app.get('/*', (req, res) => {
+        res.sendFile(path.resolve('index.html'));
+    })
+}
+
 export const addNewTask = async task => {
     let db = await connectDB();
     let collection = db.collection('tasks');
     await collection.insertOne(task);
 }
-
 
 export const updateTask = async task => {
     let { id, group, isComplete, name } = task;
