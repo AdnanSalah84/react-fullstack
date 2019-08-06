@@ -2,7 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { connectDB } from './connect-db';
+import { authenticationRoute } from './authenticate';
 import './initialize-db';
+
 
 let port = 8888;
 let app = express();
@@ -12,7 +14,13 @@ app.listen(port, console.log('Server listening on port', port));
 //     res.send('Hello World!!!!');
 // });
 
-app.use(cors(), bodyParser.urlencoded({ extended: true }), bodyParser.json());
+app.use(
+    cors(),
+    bodyParser.urlencoded({ extended: true }),
+    bodyParser.json()
+);
+
+authenticationRoute(app);
 
 export const addNewTask = async task => {
     let db = await connectDB();

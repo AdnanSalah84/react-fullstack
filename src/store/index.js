@@ -4,7 +4,7 @@ import { createLogger } from 'redux-logger'
 import createSagaMiddleware from 'redux-saga';
 //import * as sagas from './sagas.mock'
 import * as sagas from './sagas'
-import * as mutation from './mutations'
+import * as mutations from './mutations'
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -17,18 +17,22 @@ export const store = createStore(
         session(userSession = defaultState.session || {}, action) {
             let { type, authenticated, session } = action;
             switch (type) {
-                case mutation.REQUEST_AUTHENTICATE_USER:
-                    return { ...userSession, authenticated: mutation.AUTHENTICATING };
-                case mutation.PROCESSING_AUTHENTICATE_USER:
+                case mutations.SET_STATE:
+                    return { ...userSession, id: action.state.session.id };
+                case mutations.REQUEST_AUTHENTICATE_USER:
+                    return { ...userSession, authenticated: mutations.AUTHENTICATING };
+                case mutations.PROCESSING_AUTHENTICATE_USER:
                     return { ...userSession, authenticated };
                 default:
                     return userSession;
             }
         },
-        tasks(tasks = defaultState.tasks, action) {
+        tasks(tasks = [], action) {
             // eslint-disable-next-line default-case
             switch (action.type) {
-                case mutation.CREATE_TASK:
+                case mutations.SET_STATE:
+                    return action.state.tasks;
+                case mutations.CREATE_TASK:
                     //console.log(action);
                     return [...tasks, {
                         id: action.taskID,
@@ -37,28 +41,32 @@ export const store = createStore(
                         owner: action.ownerID,
                         isComplete: false
                     }]
-                case mutation.SET_TASK_COMPLETE:
+                case mutations.SET_TASK_COMPLETE:
                     return tasks.map(task => {
                         return (task.id === action.taskID) ? { ...task, isComplete: action.isComplete } : task
                     })
-                case mutation.SET_TASK_NAME:
+                case mutations.SET_TASK_NAME:
                     return tasks.map(task => {
                         return (task.id === action.taskID) ? { ...task, name: action.name } : task
                     })
-                case mutation.SET_TASK_GROUP:
+                case mutations.SET_TASK_GROUP:
                     return tasks.map(task => {
                         return (task.id === action.taskID) ? { ...task, group: action.groupID } : task
                     })
             }
             return tasks;
         },
-        comments(comments = defaultState.comments) {
+        comments(comments = []) {
             return comments;
         },
-        groups(groups = defaultState.groups) {
+        groups(groups = [], action) {
+            switch (action.type) {
+                case mutations.SET_STATE:
+                    return action.state.groups;
+            }
             return groups;
         },
-        users(users = defaultState.users) {
+        users(users = []) {
             return users;
         },
     }),
